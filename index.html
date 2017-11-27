@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>One Project</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="style/style.css">
+        <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="bower_components/ui/css/ui.css">
+        <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+        <style>
+            textarea {
+                min-width: 550px;
+                height: auto;
+                box-sizing: border-box;
+            }
+            th {
+                text-align: center;
+            }
+            .EditFields{
+                width: 110px;
+                text-align: center;
+                padding-right: 0px;
+            }
+            .DataTable td{
+                text-align: center;
+            }
+            .addField{
+                width: 120px;
+            }
+            #addFieldContainer input{
+                text-align: center;
+            }
+            span.disabled a {
+                /* Make the disabled links grayish*/
+                color: gray;
+                /* And disable the pointer events */
+                pointer-events: none;
+            }
+            #editReportContainer{
+                padding-left: 200px;
+                width: 900px;
+            }
+            .btn{
+                width: 80px;
+                margin-left: 5px;
+                text-align: center;
+            }
+            table {
+                table-layout: fixed;
+            }
+        </style>
+    </head>
+    <body>
+        <form>
+            <div class="container">
+                <div class="report_content">
+                    <div class="col-md-12">
+                        <h3 class="center">Report Tool</h3>
+                        <!-- container for view report list-->
+                        <div id="viewContainer">
+                            <p class="pull-right"><a href="#" id="addBtn" class="btn btn-success "><span class="glyphicon glyphicon-plus"></span>&nbsp;Add</a></p>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th style="width: 200px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reportList">
+                                    <tr>
+                                        <td colspan="2" class="center">
+                                            Loading <i class="fa fa-fw fa-spin fa-circle-o-notch"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="editContainer" style="display: none">
+                            <!-- container for edit report-->
+                            <p class="pull-right">
+                                <a id="btnCancel" class="btn btn-default">Cancel</a>
+                                &nbsp;
+                                <a id="btnSave" class="btn btn-success">Save</a>
+                                &nbsp;
+                            </p>
+                            <div id="editReportContainer">
+                                <p>&nbsp;</p>
+                                <div class="form-group">
+                                    <div class="labelColumn inline"><label class="left" for="Title">Title</label></div>
+                                    <div class="inputColumn inline"><input type="text" class="form-control" name="Title" id="Title"/></div>
+                                    <div class="break"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="labelColumn inline"><label class="left" for="ReportTitle">Report Title</label></div>
+                                    <div class="inputColumn inline"><input type="text" class="form-control" name="ReportTitle" id="ReportTitle"/><span style="color: red;" id="ReportTitle_alert"></span></div>
+                                    <div class="break"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="labelColumn inline"><label class="left" for="ReportSubtitle">Report Sub Title</label></div>
+                                    <div class="inputColumn inline"><input type="text" class="form-control" name="ReportSubtitle" id="ReportSubtitle"/><span style="color: red;" id="ReportSubtitle_alert"></span></div>
+                                    <div class="break"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="labelColumn inline"><label class="left" for="Section">Section</label></div>
+                                    <div class="inputColumn inline"><input class="form-control" name="Section" id="Section" /></div>
+                                    <div class="break"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="labelColumn inline"><label class="left" for="Description">Description</label></div>
+                                    <div class="inputColumn inline"><textarea class="form-control" name="Description" id="Description"></textarea></div>
+                                    <div class="break"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="labelColumn inline"><label class="left" for="ReportSQL">Report SQL</label></div>
+                                    <div class="inputColumn inline"><textarea class="form-control" name="ReportSQL" id="ReportSQL">
+                                        </textarea> <span style="color: red;" id="suggestion_message"></span></div>
+                                    <div class="break"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="labelColumn inline"><label class="left" for="DateCreated">Date Created</label></div>
+                                    <div class="inputColumn inline"><input type="text" class="form-control" name="DateCreated" id="DateCreated" readonly/></div>
+                                    <div class="break"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="labelColumn inline"><label class="left" for="CreatedBy">Created By</label></div>
+                                    <div class="inputColumn inline"><input type="text" class="form-control" name="CreatedBy" id="CreatedBy" readonly /></div>
+                                    <div class="break"></div>
+                                </div>
+                            </div>
+                            <div id="addFieldContainer">
+                                <h3>Report Field Data</h3>
+                                <p class="pull-right"><a href="#" class="btn btn-info" id="btnAddField"> <span class="glyphicon glyphicon-plus"></span>&nbsp;Add</a></p>
+                                <table class="table table-bordered table-striped">
+                                    <thead id="DataTableTHead">
+                                        <tr>
+                                            <th>Field Status</th>
+                                            <th>Field Number</th>
+                                            <th>Field Title</th>
+                                            <th>Field Type</th>
+                                            <th>Default Value</th>
+                                            <th>Minimum Value</th>
+                                            <th>Maximum Value</th>
+                                            <th style="width: 190px">Action</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody id="viewAddField" style="display: none">
+                                        <tr><td>Status</td>
+                                            <td><input type="text" class="form-control addField" id="FieldNo"></td>
+                                            <td><input type="text" class="form-control addField" id="FieldTitle"></td>
+                                            <td><input type="text" class="form-control addField" id="FieldType"></td>
+                                            <td><input type="text" class="form-control addField" id="DefaultValue"></td>
+                                            <td><input type="text" class="form-control addField" id="ValueMin"></td>
+                                            <td><input type="text" class="form-control addField" id="ValueMax"></td>
+                                            <th><a class="btn btn-info" id="addField">Add</a><a class="btn btn-danger" id="btnCancelAddField">Cancel</a></th>
+                                        </tr>
+                                    </tbody>
+                                    <tbody id="viewFieldBody">
+                                        <tr>
+                                            <td colspan="8" class="center">
+                                                Loading <i class="fa fa-fw fa-spin fa-circle-o-notch"></i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="break buffer"></div>
+                </div>
+                <div class="row footer center">
+                    <div class="col-md-12">
+                        <div id="staticFooter">Corepiler Inc @2017- All Rights Reserved</div>
+                        <div id="footer"></div>
+                    </div>
+                </div>
+            </div>
+
+            <script src="bower_components/jquery/dist/jquery.js"></script>
+            <script type="text/javascript" src="js/oneProject.js"></script>
+            <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+            <script type="text/javascript" src="bower_components/ui/ui.js"></script>
+            <script type='text/javascript'>
+                google.load('visualization', '1', {packages: ['table']});
+                google.setOnLoadCallback(getReportList);
+            </script>
+            <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+        </form>
+
+    </body>
+</html>
